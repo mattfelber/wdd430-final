@@ -20,7 +20,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </div>
       </header>
-      <main className="flex-grow bg-gray-50">
+      <main className="flex-grow bg-gray-50 pt-16">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           {children}
         </div>
