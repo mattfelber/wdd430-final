@@ -6,6 +6,7 @@ import { supabase } from '../supabaseClient';
 
 type AuthContextType = {
   user: User | null;
+  loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -27,20 +28,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Listen for changes on auth state (signed in, signed out, etc.)
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null);
+      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
 
     if (error) throw error;
+
+    // Check if the user needs to confirm their email
+    if (data?.user && !data.user.confirmed_at) {
+      throw new Error('Please check your email for a confirmation link.');
+    }
+
+    return data;
   };
 
   const signIn = async (email: string, password: string) => {
@@ -49,7 +61,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       password,
     });
 
-    if (error) throw error;
+    if (error) {
+      if (error.message.includes('Email not confirmed')) {
+        throw new Error('Please confirm your email address before signing in.');
+      }
+      throw error;
+    }
   };
 
   const signOut = async () => {
@@ -59,6 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const value = {
     user,
+    loading,
     signIn,
     signUp,
     signOut,

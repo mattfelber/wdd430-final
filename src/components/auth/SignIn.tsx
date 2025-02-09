@@ -18,12 +18,21 @@ export default function SignIn() {
       setError(null);
       setLoading(true);
       await signIn(email, password);
-      // Redirect to home page after successful sign in
       router.push('/');
       router.refresh(); // Refresh to update navigation state
     } catch (err) {
       console.error('Sign in error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to sign in. Please check your credentials.');
+      if (err instanceof Error) {
+        if (err.message.includes('Invalid login credentials')) {
+          setError('Invalid email or password');
+        } else if (err.message.includes('Email not confirmed')) {
+          setError('Please confirm your email address before signing in');
+        } else {
+          setError(err.message);
+        }
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setLoading(false);
     }
