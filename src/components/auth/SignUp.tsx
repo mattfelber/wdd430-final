@@ -30,8 +30,10 @@ export default function SignUp() {
     try {
       setError(null);
       setLoading(true);
-      await signUp(email, password);
-      setEmailSent(true);
+      const { user } = await signUp(email, password);
+      if (user && !user.confirmed_at) {
+        setEmailSent(true);
+      }
     } catch (err) {
       console.error('Sign up error:', err);
       setError(err instanceof Error ? err.message : 'Failed to create account. Please try again.');
