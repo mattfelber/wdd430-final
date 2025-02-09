@@ -1,8 +1,11 @@
+'use client';
+
 import Image from "next/image";
+import Layout from "@/components/Layout";
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <Layout>
       {/* Hero Section */}
       <div className="bg-indigo-50 py-16 relative overflow-hidden">
         <div className="absolute inset-0">
@@ -21,7 +24,7 @@ export default function Home() {
               <span className="block text-indigo-600">Handcrafted Haven</span>
             </h1>
             <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-              DDiscover unique handcrafted items from talented artisans around the world.
+              Discover unique handcrafted items made with love and care by talented artisans.
             </p>
           </div>
         </div>
@@ -87,6 +90,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

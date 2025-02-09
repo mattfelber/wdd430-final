@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
-import Navigation from "@/components/Navigation";
+import { CartProvider } from "@/contexts/CartContext";
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,28 +27,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-gray-50`}>
+        <Toaster position="top-right" />
         <AuthProvider>
-          <header className="bg-white shadow-sm">
-            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between h-16">
-                <div className="flex">
-                  <div className="flex-shrink-0 flex items-center">
-                    <h1 className="text-2xl font-bold text-indigo-600">Handcrafted Haven</h1>
-                  </div>
-                </div>
-                <Navigation />
-              </div>
-            </nav>
-          </header>
-          <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <CartProvider>
             {children}
-          </main>
-          <footer className="bg-white">
-            <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-              <p className="text-center text-gray-500"> 2024 Handcrafted Haven. All rights reserved.</p>
-            </div>
-          </footer>
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>
