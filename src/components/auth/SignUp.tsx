@@ -49,7 +49,7 @@ export default function SignUp() {
               Check your email
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-              We've sent a confirmation email to {email}. Please click the link in the email to verify your account.
+              We&apos;ve sent a confirmation email to {email}. Please click the link in the email to verify your account.
             </p>
             <div className="mt-4">
               <button
