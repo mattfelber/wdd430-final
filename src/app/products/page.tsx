@@ -14,6 +14,7 @@ interface Product {
   description: string;
   image: string;
   sellerId: number;
+  category: string;
 }
 
 const PRODUCTS_DATA: Product[] = [
@@ -23,7 +24,8 @@ const PRODUCTS_DATA: Product[] = [
     price: 29.99,
     description: 'Beautiful handmade ceramic vase perfect for any home decor',
     image: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=500&h=500&fit=crop',
-    sellerId: 1
+    sellerId: 1,
+    category: 'Ceramics'
   },
   {
     id: 2,
@@ -31,7 +33,8 @@ const PRODUCTS_DATA: Product[] = [
     price: 39.99,
     description: 'Set of 4 handcrafted ceramic coffee mugs',
     image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500&h=500&fit=crop',
-    sellerId: 1
+    sellerId: 1,
+    category: 'Ceramics'
   },
   {
     id: 3,
@@ -39,7 +42,8 @@ const PRODUCTS_DATA: Product[] = [
     price: 39.99,
     description: 'Hand-carved wooden serving bowl from sustainable materials',
     image: 'https://images.unsplash.com/photo-1526434426615-1abe81efcb0b?w=500&h=500&fit=crop',
-    sellerId: 2
+    sellerId: 2,
+    category: 'Woodwork'
   },
   {
     id: 4,
@@ -47,7 +51,8 @@ const PRODUCTS_DATA: Product[] = [
     price: 34.99,
     description: 'Handcrafted wooden cutting board with unique grain patterns',
     image: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=500&h=500&fit=crop',
-    sellerId: 2
+    sellerId: 2,
+    category: 'Woodwork'
   },
   {
     id: 5,
@@ -55,7 +60,8 @@ const PRODUCTS_DATA: Product[] = [
     price: 49.99,
     description: 'Unique woven wall hanging made with natural fibers',
     image: 'https://images.unsplash.com/photo-1611486212557-88be5ff6f941?w=500&h=500&fit=crop',
-    sellerId: 3
+    sellerId: 3,
+    category: 'Textiles'
   },
   {
     id: 6,
@@ -63,13 +69,21 @@ const PRODUCTS_DATA: Product[] = [
     price: 44.99,
     description: 'Beautiful handwoven table runner with intricate patterns',
     image: 'https://images.unsplash.com/photo-1528822855841-e8bf3134cdc9?w=500&h=500&fit=crop',
-    sellerId: 3
+    sellerId: 3,
+    category: 'Textiles'
   }
 ];
 
 export default function Products() {
   const { addToCart } = useCart();
   const [products] = useState<Product[]>(PRODUCTS_DATA);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
+  const categories = ['All', ...new Set(PRODUCTS_DATA.map(product => product.category))];
+
+  const filteredProducts = selectedCategory === 'All'
+    ? products
+    : products.filter(product => product.category === selectedCategory);
 
   const handleAddToCart = (product: Product) => {
     addToCart(product);
@@ -81,13 +95,28 @@ export default function Products() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Products</h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 mb-8">
             Each piece is handcrafted with care and attention to detail
           </p>
+          <div className="flex justify-center gap-4 mb-8">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-md transition-colors ${
+                  selectedCategory === category
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="group cursor-pointer">
                 <Link href={`/products/${product.id}`} className="block">
