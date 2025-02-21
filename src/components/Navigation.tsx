@@ -10,6 +10,13 @@ export default function Navigation() {
   const { user, signOut } = useAuth();
   const { totalItems } = useCart();
 
+  const isActive = (pathname) => {
+    return pathname === window.location.pathname;
+  };
+
+  const activeClass = 'text-indigo-600';
+  const inactiveClass = 'text-gray-700 hover:text-indigo-600';
+
   return (
     <nav className="bg-white shadow-lg fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
@@ -32,13 +39,19 @@ export default function Navigation() {
               </Link>
               <Link
                 href="/products"
-                className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
+                className={`${isActive('/products') ? activeClass : inactiveClass} px-3 py-2 rounded-md text-sm font-medium`}
               >
                 Products
               </Link>
               <Link
+                href="/categories"
+                className={`${isActive('/categories') ? activeClass : inactiveClass} px-3 py-2 rounded-md text-sm font-medium`}
+              >
+                Categories
+              </Link>
+              <Link
                 href="/sellers"
-                className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
+                className={`${isActive('/sellers') ? activeClass : inactiveClass} px-3 py-2 rounded-md text-sm font-medium`}
               >
                 Sellers
               </Link>
@@ -139,6 +152,13 @@ export default function Navigation() {
             onClick={() => setIsOpen(false)}
           >
             Products
+          </Link>
+          <Link
+            href="/categories"
+            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
+            onClick={() => setIsOpen(false)}
+          >
+            Categories
           </Link>
           <Link
             href="/sellers"
