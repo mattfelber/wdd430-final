@@ -89,35 +89,44 @@ export default function Products() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {products.map((product) => (
             <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="relative h-64">
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-              </div>
-              <div className="p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">{product.name}</h2>
-                <p className="text-gray-600 mb-4">{product.description}</p>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-2xl font-bold text-gray-900">
-                    ${product.price.toFixed(2)}
-                  </span>
-                  <button
-                    onClick={() => handleAddToCart(product)}
-                    className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-                <Link 
-                  href={`/sellers/${product.sellerId}`}
-                  className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-                >
-                  View Seller
+              <div className="group cursor-pointer">
+                <Link href={`/products/${product.id}`} className="block">
+                  <div className="relative h-64">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h2 className="text-xl font-semibold text-gray-900 mb-2">{product.name}</h2>
+                    <p className="text-gray-600 mb-4">{product.description}</p>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-2xl font-bold text-gray-900">
+                        ${product.price.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
                 </Link>
+                <div className="px-6 pb-6">
+                  <div className="flex items-center justify-between">
+                    <Link 
+                      href={`/sellers/${product.sellerId}`}
+                      className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                    >
+                      View Seller
+                    </Link>
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
