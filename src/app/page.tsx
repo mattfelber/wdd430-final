@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Layout from "@/components/Layout";
 import Link from "next/link";
+import { CATEGORIES } from '@/data/categories';
 
 export default function Home() {
   return (
@@ -39,26 +40,10 @@ export default function Home() {
             <p className="text-gray-600">Discover unique handcrafted items in every category</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: 'Ceramics',
-                image: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&h=600&fit=crop',
-                description: 'Handcrafted pottery and decorative pieces'
-              },
-              {
-                name: 'Woodwork',
-                image: 'https://images.unsplash.com/photo-1526434426615-1abe81efcb0b?w=800&h=600&fit=crop',
-                description: 'Custom wooden furniture and accessories'
-              },
-              {
-                name: 'Textiles',
-                image: 'https://images.unsplash.com/photo-1611486212557-88be5ff6f941?w=800&h=600&fit=crop',
-                description: 'Handwoven fabrics and home textiles'
-              }
-            ].map((category) => (
+            {CATEGORIES.map((category) => (
               <Link
                 href={`/products?category=${category.name}`}
-                key={category.name}
+                key={category.id}
                 className="group block"
               >
                 <div className="relative h-64 rounded-lg overflow-hidden mb-4">
@@ -124,29 +109,25 @@ export default function Home() {
       <div className="bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h2 className="text-2xl font-extrabold text-gray-900 mb-6">Browse Categories</h2>
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
-            {[
-              { name: 'Jewelry', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338' },
-              { name: 'Pottery', image: 'https://images.unsplash.com/photo-1610701596061-2ecf227e85b2' },
-              { name: 'Textiles', image: 'https://images.unsplash.com/photo-1544967082-d9d25d867d66' },
-              { name: 'Woodwork', image: 'https://images.unsplash.com/photo-1611486212557-88be5ff6f941' }
-            ].map((category) => (
-              <div
-                key={category.name}
-                className="relative rounded-lg overflow-hidden h-40 group"
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-3">
+            {CATEGORIES.map((category) => (
+              <Link
+                href={`/products?category=${category.name}`}
+                key={category.id}
+                className="relative rounded-lg overflow-hidden h-40 group cursor-pointer"
               >
                 <Image
                   src={category.image}
                   alt={category.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-200"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity duration-200">
-                  <div className="flex items-center justify-center h-full">
-                    <h3 className="text-lg font-medium text-white">{category.name}</h3>
-                  </div>
+                <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-white text-xl font-semibold">{category.name}</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from 'react-hot-toast';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { CATEGORIES } from '@/data/categories';
 
 interface Product {
   id: number;
@@ -76,14 +78,68 @@ const PRODUCTS_DATA: Product[] = [
 
 export default function Products() {
   const { addToCart } = useCart();
-  const [products] = useState<Product[]>(PRODUCTS_DATA);
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [products, setProducts] = useState<Product[]>(PRODUCTS_DATA);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  
+  // Get category from URL or default to 'All'
+  const categoryFromUrl = searchParams.get('category') || 'All';
+  const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl);
+  const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 100 });
+  const [sortOption, setSortOption] = useState<string>('default');
 
-  const categories = ['All', ...new Set(PRODUCTS_DATA.map(product => product.category))];
+  // Update URL when category changes
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    if (category === 'All') {
+      router.push('/products');
+    } else {
+      router.push(`/products?category=${category}`);
+    }
+  };
 
-  const filteredProducts = selectedCategory === 'All'
-    ? products
-    : products.filter(product => product.category === selectedCategory);
+  // Sync with URL parameters on mount and URL changes
+  useEffect(() => {
+    setSelectedCategory(categoryFromUrl);
+  }, [categoryFromUrl]);
+
+  const categories = ['All', ...CATEGORIES.map(category => category.name)];
+
+  // Filter and sort products
+  const filteredAndSortedProducts = useMemo(() => {
+    let result = [...products];
+
+    // Apply category filter
+    if (selectedCategory !== 'All') {
+      result = result.filter(product => product.category === selectedCategory);
+    }
+
+    // Apply price range filter
+    result = result.filter(
+      product => product.price >= priceRange.min && product.price <= priceRange.max
+    );
+
+    // Apply sorting
+    switch (sortOption) {
+      case 'price-asc':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'name-asc':
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'name-desc':
+        result.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      default:
+        // Keep original order
+        break;
+    }
+
+    return result;
+  }, [products, selectedCategory, priceRange, sortOption]);
 
   const handleAddToCart = (product: Product) => {
     addToCart(product);
@@ -98,25 +154,144 @@ export default function Products() {
           <p className="text-lg text-gray-600 mb-8">
             Each piece is handcrafted with care and attention to detail
           </p>
-          <div className="flex justify-center gap-4 mb-8">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-md transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+          
+          {/* Filters and Sorting Section */}
+          <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Category Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Browse Categories
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <Link
+                    href="/products"
+                    className={`block relative rounded-lg overflow-hidden ${
+                      selectedCategory === 'All' ? 'ring-2 ring-indigo-600' : ''
+                    }`}
+                  >
+                    <div className="relative w-full">
+                      <div className="aspect-[4/3]">
+                        <Image
+                          src="https://images.unsplash.com/photo-1506806732259-39c2d0268443?w=800&h=450&fit=crop"
+                          alt="All Categories"
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-200"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-white text-lg font-semibold">All Categories</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                  {CATEGORIES.map((category) => (
+                    <Link
+                      key={category.id}
+                      href={`/products?category=${category.name}`}
+                      className={`block relative rounded-lg overflow-hidden ${
+                        selectedCategory === category.name ? 'ring-2 ring-indigo-600' : ''
+                      }`}
+                    >
+                      <div className="relative w-full">
+                        <div className="aspect-[4/3]">
+                          <Image
+                            src={category.image}
+                            alt={category.name}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-200"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-white text-lg font-semibold">{category.name}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {['All', ...CATEGORIES.map(c => c.name)].map((category) => (
+                    <Link
+                      key={category}
+                      href={category === 'All' ? '/products' : `/products?category=${category}`}
+                      className={`px-4 py-2 rounded-md text-sm transition-colors ${
+                        selectedCategory === category
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                      }`}
+                    >
+                      {category}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Range Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Price Range (${priceRange.min} - ${priceRange.max})
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={priceRange.min}
+                    onChange={(e) =>
+                      setPriceRange(prev => ({
+                        ...prev,
+                        min: Math.min(Number(e.target.value), prev.max)
+                      }))
+                    }
+                    className="w-full"
+                  />
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={priceRange.max}
+                    onChange={(e) =>
+                      setPriceRange(prev => ({
+                        ...prev,
+                        max: Math.max(Number(e.target.value), prev.min)
+                      }))
+                    }
+                    className="w-full"
+                  />
+                </div>
+              </div>
+
+              {/* Sort Options */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Sort By
+                </label>
+                <select
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-white text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm"
+                >
+                  <option value="default" className="bg-white text-gray-900 hover:bg-gray-50">Default</option>
+                  <option value="price-asc" className="bg-white text-gray-900 hover:bg-gray-50">Price: Low to High</option>
+                  <option value="price-desc" className="bg-white text-gray-900 hover:bg-gray-50">Price: High to Low</option>
+                  <option value="name-asc" className="bg-white text-gray-900 hover:bg-gray-50">Name: A to Z</option>
+                  <option value="name-desc" className="bg-white text-gray-900 hover:bg-gray-50">Name: Z to A</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Results Count */}
+            <div className="mt-4 text-sm text-gray-600">
+              Showing {filteredAndSortedProducts.length} products
+            </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProducts.map((product) => (
+          {filteredAndSortedProducts.map((product) => (
             <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="group cursor-pointer">
                 <Link href={`/products/${product.id}`} className="block">

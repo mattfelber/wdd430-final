@@ -1,30 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
-
-const CATEGORIES = [
-  {
-    id: 'ceramics',
-    name: 'Ceramics',
-    description: 'Handcrafted pottery, vases, and decorative pieces',
-    image: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&h=600&fit=crop',
-    count: 2
-  },
-  {
-    id: 'woodwork',
-    name: 'Woodwork',
-    description: 'Custom wooden furniture and home accessories',
-    image: 'https://images.unsplash.com/photo-1526434426615-1abe81efcb0b?w=800&h=600&fit=crop',
-    count: 2
-  },
-  {
-    id: 'textiles',
-    name: 'Textiles',
-    description: 'Handwoven fabrics, wall hangings, and home textiles',
-    image: 'https://images.unsplash.com/photo-1611486212557-88be5ff6f941?w=800&h=600&fit=crop',
-    count: 2
-  }
-];
+import { CATEGORIES } from '@/data/categories';
 
 export default function Categories() {
   return (
@@ -34,7 +11,7 @@ export default function Categories() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {CATEGORIES.map((category) => (
             <Link
-              href={`/products?category=${category.id}`}
+              href={`/products?category=${category.name}`}
               key={category.id}
               className="group"
             >
