@@ -13,30 +13,32 @@ interface Seller {
   profileImage: string;
 }
 
+const SELLERS_DATA: Seller[] = [
+  {
+    id: 1,
+    name: 'John\'s Pottery',
+    description: 'Handcrafted ceramic pieces made with love',
+    image: 'https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&auto=format&fit=crop',
+    profileImage: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400&auto=format&fit=crop'
+  },
+  {
+    id: 2,
+    name: 'Wooden Wonders',
+    description: 'Beautiful wooden crafts and furniture',
+    image: 'https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=800&auto=format&fit=crop',
+    profileImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop'
+  },
+  {
+    id: 3,
+    name: 'Textile Treasures',
+    description: 'Unique handwoven textiles and fabrics',
+    image: 'https://images.unsplash.com/photo-1459501462159-97d5bded1416?w=800&auto=format&fit=crop',
+    profileImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop'
+  },
+];
+
 export default function SellersPage() {
-  const [sellers] = useState<Seller[]>([
-    {
-      id: 1,
-      name: 'John\'s Pottery',
-      description: 'Handcrafted ceramic pieces made with love',
-      image: 'https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&auto=format&fit=crop',
-      profileImage: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400&auto=format&fit=crop'
-    },
-    {
-      id: 2,
-      name: 'Wooden Wonders',
-      description: 'Beautiful wooden crafts and furniture',
-      image: 'https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=800&auto=format&fit=crop',
-      profileImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop'
-    },
-    {
-      id: 3,
-      name: 'Textile Treasures',
-      description: 'Unique handwoven textiles and fabrics',
-      image: 'https://images.unsplash.com/photo-1459501462159-97d5bded1416?w=800&auto=format&fit=crop',
-      profileImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop'
-    },
-  ]);
+  const [sellers] = useState<Seller[]>(SELLERS_DATA);
 
   return (
     <Layout>
