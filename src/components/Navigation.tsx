@@ -37,6 +37,12 @@ export default function Navigation() {
                 Products
               </Link>
               <Link
+                href="/sellers"
+                className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Sellers
+              </Link>
+              <Link
                 href="/cart"
                 className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium relative"
               >
@@ -133,6 +139,13 @@ export default function Navigation() {
             onClick={() => setIsOpen(false)}
           >
             Products
+          </Link>
+          <Link
+            href="/sellers"
+            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
+            onClick={() => setIsOpen(false)}
+          >
+            Sellers
           </Link>
           <Link
             href="/cart"
