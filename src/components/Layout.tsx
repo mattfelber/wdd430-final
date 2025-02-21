@@ -49,7 +49,7 @@ export default function Layout({ children }: LayoutProps) {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-300">
-            <p>&copy; {new Date().getFullYear()} Handcrafted Haven. All rights reserved.</p>
+            <p>&copy; 2024 Handcrafted Haven. All rights reserved.</p>
           </div>
         </div>
       </footer>
