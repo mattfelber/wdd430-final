@@ -6,7 +6,6 @@ import Providers from "@/components/Providers";
 const geist = Geist({
   subsets: ["latin"],
   display: 'swap',
-  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {

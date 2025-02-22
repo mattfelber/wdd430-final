@@ -7,7 +7,6 @@ const nextConfig = {
       'plus.unsplash.com',
       'unsplash.com'
     ],
-    unoptimized: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
