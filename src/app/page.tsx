@@ -6,17 +6,7 @@ import { CATEGORIES } from '@/data/categories';
 export default function Home() {
   return (
     <Layout>
-      {/* Hero Section */}
       <div className="bg-indigo-50 py-16 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1544967082-d9d25d867d66"
-            alt="Handcrafted items background"
-            fill
-            className="object-cover opacity-10"
-            priority
-          />
-        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center">
             <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
@@ -30,7 +20,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Categories Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -51,6 +40,7 @@ export default function Home() {
                     fill
                     className="object-cover transform transition duration-300 group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
+                    priority
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity group-hover:bg-opacity-30" />
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -74,18 +64,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Products Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h2 className="text-2xl font-extrabold text-gray-900 mb-6">Featured Products</h2>
         <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
           {/* Example Product Card */}
           <div className="group relative">
             <div className="aspect-w-4 aspect-h-3 rounded-lg overflow-hidden">
-              <Image
+              <img
                 src="https://images.unsplash.com/photo-1610701596007-11502861dcfa"
                 alt="Handmade ceramic vase"
-                width={400}
-                height={300}
                 className="object-cover object-center"
               />
             </div>
@@ -103,7 +90,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Categories Section */}
       <div className="bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h2 className="text-2xl font-extrabold text-gray-900 mb-6">Browse Categories</h2>
@@ -114,12 +100,10 @@ export default function Home() {
                 key={category.id}
                 className="relative rounded-lg overflow-hidden h-40 group cursor-pointer"
               >
-                <Image
+                <img
                   src={category.image}
                   alt={category.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-200"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity" />
                 <div className="absolute inset-0 flex items-center justify-center">
